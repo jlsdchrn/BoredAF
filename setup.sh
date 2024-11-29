@@ -27,36 +27,26 @@ else
     usage
 fi
 
+# Check for dependencies
+if [ ! -d ~/BordedAF_env ]; then
+    echo "Error: Virtual environment directory '~/BordedAF_env' does not exist."
+    exit 1
+fi
+
+if [ ! -f ~/BoredAF/wanna_quit_my_major.py ]; then
+    echo "Error: Python script '~/BoredAF/wanna_quit_my_major.py' does not exist."
+    exit 1
+fi
+
 # Add alias to shell configuration
-ALIAS_COMMAND="alias myscript='python3 myscript.py'"
-if ! grep -Fxq "$ALIAS_COMMAND" "$SHELL_CONFIG"; then
+ALIAS_COMMAND='alias hateCISD="function _hateCISD { cd; source ~/BordedAF_env/bin/activate; python3 ~/BoredAF/wanna_quit_my_major.py \"$@\"; }; _hateCISD"'
+if ! grep -Fq 'alias hateCISD' "$SHELL_CONFIG"; then
+    echo "" >> "$SHELL_CONFIG"
     echo "$ALIAS_COMMAND" >> "$SHELL_CONFIG"
     echo "Alias added to $SHELL_CONFIG"
 else
     echo "Alias already exists in $SHELL_CONFIG"
 fi
 
-# Run Zsh-specific setup
-if [ "$SHELL_TYPE" == "zsh" ]; then
-    if ! command -v zsh > /dev/null; then
-        echo "Error: Zsh is not installed. Install Zsh and try again."
-        exit 1
-    fi
-    
-    # Execute Zsh-specific commands using a subshell
-    zsh -c "zstyle ':completion:*' completer _complete"
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to configure Zsh completion."
-        exit 1
-    fi
-    echo "Zsh completion configured successfully."
-fi
-
 # Reload shell configuration
-if [ "$SHELL_TYPE" == "bash" ]; then
-    source "$SHELL_CONFIG"
-elif [ "$SHELL_TYPE" == "zsh" ]; then
-    zsh -c "source $SHELL_CONFIG"
-fi
-
-echo "Setup completed successfully for $SHELL_TYPE."
+echo "Setup completed successfully for $SHELL_TYPE. Please restart your shell or run 'source $SHELL_CONFIG' to apply changes."
