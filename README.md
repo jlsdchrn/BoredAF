@@ -21,7 +21,7 @@ This project includes scripts to enhance your productivity (or sanity) during CI
 1. Clone or download the project to your home directory:
    ```bash
    cd ~
-   git clone <repository-url> BoredAF
+   git clone https://github.com/jlsdchrn/BoredAF.git
    cd BoredAF
    ```
 
@@ -55,7 +55,8 @@ This project includes scripts to enhance your productivity (or sanity) during CI
    - `wanna_quit_my_major.py`: Main script.
    - `animated_gif.py`: Utility for processing GIFs.
 
-2. Prepare your `.ics` calendar file (e.g., `ADECal.ics`) and place it in the `BoredAF` directory. If the name is different from "`ADECal.ics`, change it in the code.
+2. Prepare your `.ics` calendar file (e.g., `ADECal.ics`) and place it in the `BoredAF` directory. 
+If the name is different from `ADECal.ics`, change it in the code.
 
 3. Run the program using the alias:
    ```bash
