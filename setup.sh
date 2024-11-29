@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# This script sets up a Python virtual environment, installs dependencies, and configures an alias for either bash or zsh.
+# This script sets up a Python virtual environment, installs dependencies,
+# and configures an alias for either Bash or Zsh.
 
 # Function to display usage instructions
 usage() {
@@ -17,38 +18,45 @@ fi
 # Determine the shell configuration file
 if [ "$1" == "bash" ]; then
     SHELL_CONFIG=~/.bashrc
+    SHELL_TYPE="bash"
 elif [ "$1" == "zsh" ]; then
     SHELL_CONFIG=~/.zshrc
+    SHELL_TYPE="zsh"
 else
+    echo "Error: Unsupported shell type '$1'. Use 'bash' or 'zsh'."
     usage
 fi
 
-# Step 1: Create the Python virtual environment and install dependencies
-cd ~ || exit
-
-# Create virtual environment
-if [ ! -d "BordedAF_env" ]; then
-    echo "Creating virtual environment BordedAF_env..."
-    python3 -m venv BordedAF_env
+# Add alias to shell configuration
+ALIAS_COMMAND="alias myscript='python3 myscript.py'"
+if ! grep -Fxq "$ALIAS_COMMAND" "$SHELL_CONFIG"; then
+    echo "$ALIAS_COMMAND" >> "$SHELL_CONFIG"
+    echo "Alias added to $SHELL_CONFIG"
 else
-    echo "Virtual environment BordedAF_env already exists."
+    echo "Alias already exists in $SHELL_CONFIG"
 fi
 
-# Activate virtual environment and install dependencies
-source ~/BordedAF_env/bin/activate
-pip install --upgrade pip
-pip install rich ics Pillow beautifulsoup4 requests
+# Run Zsh-specific setup
+if [ "$SHELL_TYPE" == "zsh" ]; then
+    if ! command -v zsh > /dev/null; then
+        echo "Error: Zsh is not installed. Install Zsh and try again."
+        exit 1
+    fi
+    
+    # Execute Zsh-specific commands using a subshell
+    zsh -c "zstyle ':completion:*' completer _complete"
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to configure Zsh completion."
+        exit 1
+    fi
+    echo "Zsh completion configured successfully."
+fi
 
-deactivate
+# Reload shell configuration
+if [ "$SHELL_TYPE" == "bash" ]; then
+    source "$SHELL_CONFIG"
+elif [ "$SHELL_TYPE" == "zsh" ]; then
+    zsh -c "source $SHELL_CONFIG"
+fi
 
-# Step 2: Configure the alias
-ALIAS="alias hateCISD='function _hateCISD() { cd; source ~/BordedAF_env/bin/activate; python3 ~/BoredAF/wanna_quit_my_major.py \"\$@\"; }; _hateCISD'"
-
-grep -qxF "$ALIAS" "$SHELL_CONFIG" || echo "$ALIAS" >> "$SHELL_CONFIG"
-
-echo "Alias added to $SHELL_CONFIG"
-
-# Step 3: Source the shell configuration file
-source "$SHELL_CONFIG"
-
-echo "Setup complete. You can now use the alias 'hateCISD' to run your script."
+echo "Setup completed successfully for $SHELL_TYPE."
