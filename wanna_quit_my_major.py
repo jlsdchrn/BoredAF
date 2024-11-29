@@ -169,7 +169,7 @@ if __name__ == "__main__":
                 print("Options:")
                 print("-h, --help : Display this help message")
                 print("-ls, --list : List the gifs in the gif folder")
-                print("-rm, --remove : Remove a gif from the gif folder")
+                print("-rm, --remove : Remove a gif from the gif folder. Type only the name of the gif without the extension")
                 print("-def, --default : Choose a random gif from the collection")
                 print("-u, --url : Specify the url of the gif")
                 print("-n, --name : Specify the name of the gif")
@@ -179,14 +179,16 @@ if __name__ == "__main__":
                     print("List of gifs:")
                     for gif in os.listdir(gif_folder):
                         print(gif)
-                else:  
-                    print("No gif found")
                 sys.exit()
             if arg == "-rm" or arg == "--remove":
                 file_name = sys.argv[sys.argv.index(arg) + 1]
                 full_path = os.path.join(gif_folder, file_name)
+                full_path += ".txt"
                 if os.path.exists(full_path):
                     os.remove(full_path)
+                else:
+                    print("The gif does not exist")
+                sys.exit()
             if arg == "-def" or arg == "--default":
                 name,url = gif_from_collection()
             if arg == "-u" or arg == "--url":
