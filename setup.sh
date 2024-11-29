@@ -27,19 +27,25 @@ else
     usage
 fi
 
-# Check for dependencies
-if [ ! -d ~/BordedAF_env ]; then
-    echo "Error: Virtual environment directory '~/BordedAF_env' does not exist."
-    exit 1
-fi
+# Step 1: Create the Python virtual environment and install dependencies
+cd ~ || exit
 
-if [ ! -f ~/BoredAF/wanna_quit_my_major.py ]; then
-    echo "Error: Python script '~/BoredAF/wanna_quit_my_major.py' does not exist."
-    exit 1
+# Create virtual environment
+if [ ! -d "BordedAF_env" ]; then
+    echo "Creating virtual environment BordedAF_env..."
+    python3 -m venv BordedAF_env
+else
+    echo "Virtual environment BordedAF_env already exists."
 fi
+# Activate virtual environment and install dependencies
+source ~/BordedAF_env/bin/activate
+pip install --upgrade pip
+pip install rich ics Pillow beautifulsoup4 requests
 
-# Add alias to shell configuration
-ALIAS_COMMAND='alias hateCISD="function _hateCISD { cd; source ~/BordedAF_env/bin/activate; python3 ~/BoredAF/wanna_quit_my_major.py \"$@\"; }; _hateCISD"'
+deactivate
+
+# Step 2: Configure the alias
+ALIAS_COMMAND='alias hateCISD="function _hateCISD { cd; source ~/BoredAF_env/bin/activate; python3 ~/BoredAF/wanna_quit_my_major.py \"$@\"; }; _hateCISD"'
 if ! grep -Fq 'alias hateCISD' "$SHELL_CONFIG"; then
     echo "" >> "$SHELL_CONFIG"
     echo "$ALIAS_COMMAND" >> "$SHELL_CONFIG"
@@ -47,6 +53,3 @@ if ! grep -Fq 'alias hateCISD' "$SHELL_CONFIG"; then
 else
     echo "Alias already exists in $SHELL_CONFIG"
 fi
-
-# Reload shell configuration
-echo "Setup completed successfully for $SHELL_TYPE. Please restart your shell or run 'source $SHELL_CONFIG' to apply changes."
