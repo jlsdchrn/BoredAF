@@ -163,7 +163,9 @@ if __name__ == "__main__":
     If the user provides arguments, the script will use them
     """
     if len(sys.argv) > 1:
+        print("d")
         for arg in sys.argv[1:]:
+            print(arg)
             if arg == "-h" or arg == "--help":
                 print("Usage: python3 wanna_quit_my_major.py [OPTIONS]")
                 print("Options:")
@@ -206,15 +208,18 @@ if __name__ == "__main__":
                     # strip the file name from the extension 
                     gif_list.append(gif.split(".")[0])
         if gif_list != []:
+            print('a')
             # Once the folder is scanned, we choose a random gif
             index = randint(0,len(gif_list)-1)
             name = gif_list[index]
             # no need for url since the gif is already downloaded
             url = ""
         else :
+            print('b')
             #If the gif folder is empty, the script will download a gif from the internet
             name,url = gif_from_collection()
     
+    print("c")
     save_path = gif_folder +name + ".txt"
     full_save_path = os.path.join(current_folder, save_path)
 

@@ -1,5 +1,7 @@
-# you ics calendar file
+# your ics calendar file
 *.ics
+# your download gif file
+gif/*.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

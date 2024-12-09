@@ -17,8 +17,17 @@ fi
 
 # Determine the shell configuration file
 if [ "$1" == "bash" ]; then
-    SHELL_CONFIG=~/.bashrc
+    SHELL_CONFIG=~/.bash_aliases
     SHELL_TYPE="bash"
+    # Check if the file exists
+    if [ ! -f "$ALIASES_FILE" ]; then
+        echo "File ~/.bash_aliases does not exist. Creating it now..."
+        touch "$ALIASES_FILE"
+        echo "# This file is used to store custom aliases" >> "$ALIASES_FILE"
+        echo "File ~/.bash_aliases created successfully."
+    else
+        echo "File ~/.bash_aliases already exists."
+    fi
 elif [ "$1" == "zsh" ]; then
     SHELL_CONFIG=~/.zshrc
     SHELL_TYPE="zsh"
@@ -45,7 +54,7 @@ pip install rich ics Pillow beautifulsoup4 requests
 deactivate
 
 # Step 2: Configure the alias
-ALIAS_COMMAND='alias hateCISD="function _hateCISD { cd; source ~/BoredAF_env/bin/activate; python3 ~/BoredAF/wanna_quit_my_major.py \"$@\"; }; _hateCISD"'
+ALIAS_COMMAND="alias hateCISD='function _hateCISD() { cd; source ~/BordedAF_env/bin/activate; python3 ~/BoredAF/wanna_quit_my_major.py \"\$@\"; }; _hateCISD'"
 if ! grep -Fq 'alias hateCISD' "$SHELL_CONFIG"; then
     echo "" >> "$SHELL_CONFIG"
     echo "$ALIAS_COMMAND" >> "$SHELL_CONFIG"
